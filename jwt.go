@@ -9,44 +9,28 @@ import (
 // JWT JWT
 type JWT struct {
 	signKey    []byte        // 密钥
-	clientID   string        // 客户端ID
-	ExpireTime time.Duration // 过期时间
+	expireTime time.Duration // 过期时间
 }
 
-// AccessClaims jwt claims
-type AccessClaims struct {
+// claims jwt claims
+type claimsStruct struct {
 	Content string `json:"content"`
 	jwt.StandardClaims
 }
 
 // Init 初始化
-func (receiver *JWT) Init(key string, clientID string, expireTimeStr string) {
-	var err error
-
+func (receiver *JWT) Init(key string, expireTimeStr string) (err error) {
 	receiver.signKey = []byte(key)
-	receiver.clientID = clientID
-	receiver.ExpireTime, err = time.ParseDuration(expireTimeStr)
-	if err != nil {
-		panic(err)
-	}
+	receiver.expireTime, err = time.ParseDuration(expireTimeStr)
+	return
 }
 
-// Valid claims verification
-func (a *AccessClaims) Valid() error {
-	if time.Unix(a.ExpiresAt, 0).Before(time.Now()) {
-		return errors.New("invalid access token")
-	}
-	return nil
-}
-
-// CreateToken 生成token
-func (receiver *JWT) CreateToken(content string) (token string, err error) {
-	claim := &AccessClaims{
+// GenerateToken 生成token
+func (receiver *JWT) GenerateToken(content string) (token string, err error) {
+	claim := &claimsStruct{
 		Content: content,
 		StandardClaims: jwt.StandardClaims{
-			Audience:  receiver.clientID,
-			ExpiresAt: time.Now().Add(receiver.ExpireTime).Unix(),
-			Subject:   receiver.clientID,
+			ExpiresAt: time.Now().Add(receiver.expireTime).Unix(),
 		},
 	}
 	tokens := jwt.NewWithClaims(jwt.SigningMethodHS512, claim)
@@ -54,8 +38,8 @@ func (receiver *JWT) CreateToken(content string) (token string, err error) {
 	return token, err
 }
 
-// ParseToken 格式化token
-func (receiver *JWT) ParseToken(tokens string) (string, error) {
+// VerifyToken 格式化token
+func (receiver *JWT) VerifyToken(tokens string) (string, error) {
 	token, err := jwt.Parse(tokens, receiver.secret())
 	if err != nil {
 		return "", err

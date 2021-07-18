@@ -7,16 +7,16 @@ func init() {
 }
 
 // Init 初始化
-func Init(key string, clientID string, expireTimeStr string) {
-	defaultJWTClient.Init(key, clientID, expireTimeStr)
+func Init(key string, expireTimeStr string) error {
+	return defaultJWTClient.Init(key, expireTimeStr)
 }
 
-// CreateToken 生成token
-func CreateToken(content string) (token string, err error) {
-	return defaultJWTClient.CreateToken(content)
+// GenerateToken 生成token
+func GenerateToken(content string) (string, error) {
+	return defaultJWTClient.GenerateToken(content)
 }
 
-// ParseToken 格式化token
-func ParseToken(tokens string) (string, error) {
-	return defaultJWTClient.ParseToken(tokens)
+// VerifyToken 格式化token
+func VerifyToken(tokens string) (string, error) {
+	return defaultJWTClient.VerifyToken(tokens)
 }
