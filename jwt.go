@@ -53,6 +53,12 @@ func (receiver *JWT) VerifyToken(tokens string) (string, error) {
 		err = errors.New("token is invalid")
 		return "", err
 	}
+
+	_, ok = claim["content"]
+	if !ok {
+		return "", errors.New("invalid token")
+	}
+
 	content := claim["content"].(string)
 	return content, nil
 }
