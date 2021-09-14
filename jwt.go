@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// JWT JWT
+// JWT Struct Info
 type JWT struct {
 	signKey    []byte        // 密钥
 	expireTime time.Duration // 过期时间
@@ -18,14 +18,23 @@ type claimsStruct struct {
 	jwt.StandardClaims
 }
 
-// Init 初始化
-func (receiver *JWT) Init(key string, expireTimeStr string) (err error) {
-	receiver.signKey = []byte(key)
-	receiver.expireTime, err = time.ParseDuration(expireTimeStr)
-	return
+// New create instance
+func New(config *Config) (*JWT, error) {
+	if config == nil {
+		return nil, errors.New("bad request")
+	}
+	var err error
+	instance := &JWT{}
+	instance.signKey = []byte(config.Key)
+	instance.expireTime, err = time.ParseDuration(config.Expire)
+	if err != nil {
+		return nil, err
+	}
+
+	return instance, nil
 }
 
-// GenerateToken 生成token
+// GenerateToken generate token
 func (receiver *JWT) GenerateToken(content string) (token string, err error) {
 	claim := &claimsStruct{
 		Content: content,
@@ -38,9 +47,9 @@ func (receiver *JWT) GenerateToken(content string) (token string, err error) {
 	return token, err
 }
 
-// VerifyToken 格式化token
-func (receiver *JWT) VerifyToken(tokens string) (string, error) {
-	token, err := jwt.Parse(tokens, receiver.secret())
+// VerifyToken verify token
+func (receiver *JWT) VerifyToken(tokenStr string) (string, error) {
+	token, err := jwt.Parse(tokenStr, receiver.secret())
 	if err != nil {
 		return "", err
 	}

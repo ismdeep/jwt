@@ -3,40 +3,40 @@ package jwt
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestInit(t *testing.T) {
-	type args struct {
-		key           string
-		expireTimeStr string
-	}
+
 	tests := []struct {
 		name    string
-		args    args
+		config  *Config
 		wantErr bool
 	}{
 		{
 			name: "",
-			args: args{
-				key:           "12345678",
-				expireTimeStr: "24h",
+			config: &Config{
+				Key:    "12345678",
+				Expire: "24h",
 			},
 			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := Init(tt.args.key, tt.args.expireTimeStr); (err != nil) != tt.wantErr {
-				t.Errorf("Init() error = %v, wantErr %v", err, tt.wantErr)
-			}
+			err := Init(tt.config)
+			assert.Equal(t, err != nil, tt.wantErr)
 		})
 	}
 }
 
 func TestCreateToken(t *testing.T) {
-
-	err := Init("12345678", "24h")
+	config := &Config{
+		Key:    "12345678",
+		Expire: "24h",
+	}
+	err := Init(config)
 	if err != nil {
 		panic(err)
 	}
@@ -59,19 +59,18 @@ func TestCreateToken(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := GenerateToken(tt.args.content)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GenerateToken() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			fmt.Printf("token = %v\n", got)
+			_, err := GenerateToken(tt.args.content)
+			assert.Equal(t, err != nil, tt.wantErr)
 		})
 	}
 }
 
 func TestParseToken(t *testing.T) {
-
-	err := Init("12345678", "24h")
+	config := &Config{
+		Key:    "12345678",
+		Expire: "24h",
+	}
+	err := Init(config)
 	if err != nil {
 		panic(err)
 	}
@@ -102,13 +101,8 @@ func TestParseToken(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := VerifyToken(tt.args.tokens)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("VerifyToken() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("VerifyToken() got = %v, want %v", got, tt.want)
-			}
+			assert.Equal(t, err != nil, tt.wantErr)
+			assert.Equal(t, got, tt.want)
 		})
 	}
 }
@@ -125,14 +119,10 @@ func TestCreateTokenWithUserStruct(t *testing.T) {
 	}
 
 	jsonBytes, err := json.Marshal(user)
-	if err != nil {
-		panic(err)
-	}
+	assert.NoError(t, err)
 
 	token, err := GenerateToken(string(jsonBytes))
-	if err != nil {
-		panic(err)
-	}
+	assert.NoError(t, err)
 
 	fmt.Printf("token = %v\n", token)
 }

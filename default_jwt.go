@@ -7,8 +7,14 @@ func init() {
 }
 
 // Init 初始化
-func Init(key string, expireTimeStr string) error {
-	return defaultJWTClient.Init(key, expireTimeStr)
+func Init(config *Config) error {
+	instance, err := New(config)
+	if err != nil {
+		return err
+	}
+
+	defaultJWTClient = instance
+	return nil
 }
 
 // GenerateToken 生成token
