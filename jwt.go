@@ -3,6 +3,7 @@ package jwt
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/ismdeep/rand"
 	"time"
 )
 
@@ -19,19 +20,24 @@ type claimsStruct struct {
 }
 
 // New create instance
-func New(config *Config) (*JWT, error) {
-	if config == nil {
-		return nil, errors.New("bad request")
+func New(config *Config) *JWT {
+	c := &Config{
+		Key:    rand.HexStr(32),
+		Expire: "72h",
 	}
-	var err error
-	instance := &JWT{}
-	instance.signKey = []byte(config.Key)
-	instance.expireTime, err = time.ParseDuration(config.Expire)
-	if err != nil {
-		return nil, err
+	if config != nil {
+		c = config
 	}
 
-	return instance, nil
+	if _, err := time.ParseDuration(c.Expire); err != nil {
+		c.Expire = "72h"
+	}
+
+	instance := &JWT{}
+	instance.signKey = []byte(c.Key)
+	instance.expireTime, _ = time.ParseDuration(c.Expire)
+
+	return instance
 }
 
 // GenerateToken generate token

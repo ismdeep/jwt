@@ -1,10 +1,5 @@
 package jwt
 
-import (
-	"errors"
-	"fmt"
-)
-
 var clients map[string]*JWT
 
 func init() {
@@ -12,27 +7,15 @@ func init() {
 }
 
 // InitClient init client
-func InitClient(name string, config *Config) error {
-	if config == nil || name == "" {
-		return errors.New("bad request")
-	}
-	instance, err := New(config)
-	if err != nil {
-		return err
-	}
-
-	clients[name] = instance
-	return nil
+func InitClient(name string, config *Config) {
+	clients[name] = New(config)
 }
 
 // InitClients init clients
-func InitClients(configs map[string]*Config) error {
+func InitClients(configs map[string]*Config) {
 	for name, config := range configs {
-		if err := InitClient(name, config); err != nil {
-			return fmt.Errorf("erorr on [%v], err = [%v]", name, err.Error())
-		}
+		InitClient(name, config)
 	}
-	return nil
 }
 
 // GetClient get client

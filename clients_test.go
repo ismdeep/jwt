@@ -63,8 +63,7 @@ func TestInitClient(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := InitClient(tt.args.name, tt.args.config)
-			assert.Equal(t, err != nil, tt.wantErr)
+			InitClient(tt.args.name, tt.args.config)
 		})
 	}
 }
@@ -105,20 +104,18 @@ func TestInitClients(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := InitClients(tt.args.configs)
-			assert.Equal(t, err != nil, tt.wantErr)
+			InitClients(tt.args.configs)
 		})
 	}
 }
 
 func TestGetClient(t *testing.T) {
-	err := InitClients(map[string]*Config{
+	InitClients(map[string]*Config{
 		"config1": {
 			Key:    "12345678",
 			Expire: "24h",
 		},
 	})
-	assert.NoError(t, err)
 
 	client1 := GetClient("config1")
 	assert.NotNil(t, client1)

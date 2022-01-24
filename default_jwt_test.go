@@ -25,8 +25,7 @@ func TestInit(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := Init(tt.config)
-			assert.Equal(t, err != nil, tt.wantErr)
+			Init(tt.config)
 		})
 	}
 }
@@ -36,10 +35,7 @@ func TestCreateToken(t *testing.T) {
 		Key:    "12345678",
 		Expire: "24h",
 	}
-	err := Init(config)
-	if err != nil {
-		panic(err)
-	}
+	Init(config)
 
 	type args struct {
 		content string
@@ -70,10 +66,7 @@ func TestParseToken(t *testing.T) {
 		Key:    "12345678",
 		Expire: "24h",
 	}
-	err := Init(config)
-	if err != nil {
-		panic(err)
-	}
+	Init(config)
 
 	token, err := GenerateToken("user001")
 	if err != nil {

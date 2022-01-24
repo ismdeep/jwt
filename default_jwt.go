@@ -1,20 +1,22 @@
 package jwt
 
+import (
+	"github.com/ismdeep/rand"
+)
+
 var defaultJWTClient *JWT
 
 func init() {
 	defaultJWTClient = &JWT{}
+	Init(&Config{
+		Key:    rand.HexStr(128),
+		Expire: "72h",
+	})
 }
 
 // Init 初始化
-func Init(config *Config) error {
-	instance, err := New(config)
-	if err != nil {
-		return err
-	}
-
-	defaultJWTClient = instance
-	return nil
+func Init(config *Config) {
+	defaultJWTClient = New(config)
 }
 
 // GenerateToken 生成token
