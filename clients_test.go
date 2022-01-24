@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"github.com/ismdeep/rand"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -21,7 +22,7 @@ func TestInitClient(t *testing.T) {
 			args: args{
 				name: "config1",
 				config: &Config{
-					Key:    "12345678",
+					Key:    rand.Password(64, 10, 0),
 					Expire: "24h",
 				},
 			},
@@ -42,7 +43,7 @@ func TestInitClient(t *testing.T) {
 			args: args{
 				name: "",
 				config: &Config{
-					Key:    "12345678",
+					Key:    rand.Password(64, 10, 0),
 					Expire: "24h",
 				},
 			},
@@ -54,7 +55,7 @@ func TestInitClient(t *testing.T) {
 			args: args{
 				name: "config3",
 				config: &Config{
-					Key:    "12345678",
+					Key:    rand.Password(64, 10, 0),
 					Expire: "",
 				},
 			},
@@ -82,7 +83,7 @@ func TestInitClients(t *testing.T) {
 			args: args{
 				configs: map[string]*Config{
 					"config1": {
-						Key:    "12345678",
+						Key:    rand.Password(64, 10, 0),
 						Expire: "24h",
 					},
 				},
@@ -94,7 +95,7 @@ func TestInitClients(t *testing.T) {
 			args: args{
 				configs: map[string]*Config{
 					"config1": {
-						Key:    "12345678",
+						Key:    rand.Password(64, 10, 0),
 						Expire: "",
 					},
 				},
@@ -112,7 +113,7 @@ func TestInitClients(t *testing.T) {
 func TestGetClient(t *testing.T) {
 	InitClients(map[string]*Config{
 		"config1": {
-			Key:    "12345678",
+			Key:    rand.Password(64, 10, 0),
 			Expire: "24h",
 		},
 	})

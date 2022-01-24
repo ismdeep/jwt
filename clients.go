@@ -2,10 +2,6 @@ package jwt
 
 var clients map[string]*JWT
 
-func init() {
-	clients = make(map[string]*JWT)
-}
-
 // InitClient init client
 func InitClient(name string, config *Config) {
 	clients[name] = New(config)

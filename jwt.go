@@ -22,7 +22,7 @@ type claimsStruct struct {
 // New create instance
 func New(config *Config) *JWT {
 	c := &Config{
-		Key:    rand.HexStr(32),
+		Key:    rand.Password(64, 10, 0),
 		Expire: "72h",
 	}
 	if config != nil {
