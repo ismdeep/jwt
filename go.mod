@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/ismdeep/config v0.0.0-20220727100802-b9f5d490c59e
+	github.com/ismdeep/config v0.0.1
 	github.com/ismdeep/rand v0.3.0
 	github.com/stretchr/testify v1.7.1
 )
