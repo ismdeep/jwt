@@ -12,6 +12,14 @@ func init() {
 		return
 	}
 
+	var ConfigData struct {
+		JWT Config
+	}
+	if err := config.Load("config", &ConfigData); err == nil {
+		Init(&data)
+		return
+	}
+
 	clients = make(map[string]*JWT)
 	defaultJWTClient = &JWT{}
 	Init(&Config{
