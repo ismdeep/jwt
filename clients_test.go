@@ -1,9 +1,10 @@
 package jwt
 
 import (
-	"github.com/ismdeep/rand"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInitClient(t *testing.T) {
@@ -22,7 +23,7 @@ func TestInitClient(t *testing.T) {
 			args: args{
 				name: "config1",
 				config: &Config{
-					Key:    rand.Password(64, 10, 0),
+					Key:    uuid.NewString(),
 					Expire: "24h",
 				},
 			},
@@ -43,7 +44,7 @@ func TestInitClient(t *testing.T) {
 			args: args{
 				name: "",
 				config: &Config{
-					Key:    rand.Password(64, 10, 0),
+					Key:    uuid.NewString(),
 					Expire: "24h",
 				},
 			},
@@ -55,7 +56,7 @@ func TestInitClient(t *testing.T) {
 			args: args{
 				name: "config3",
 				config: &Config{
-					Key:    rand.Password(64, 10, 0),
+					Key:    uuid.NewString(),
 					Expire: "",
 				},
 			},
@@ -83,7 +84,7 @@ func TestInitClients(t *testing.T) {
 			args: args{
 				configs: map[string]*Config{
 					"config1": {
-						Key:    rand.Password(64, 10, 0),
+						Key:    uuid.NewString(),
 						Expire: "24h",
 					},
 				},
@@ -95,7 +96,7 @@ func TestInitClients(t *testing.T) {
 			args: args{
 				configs: map[string]*Config{
 					"config1": {
-						Key:    rand.Password(64, 10, 0),
+						Key:    uuid.NewString(),
 						Expire: "",
 					},
 				},
@@ -113,7 +114,7 @@ func TestInitClients(t *testing.T) {
 func TestGetClient(t *testing.T) {
 	InitClients(map[string]*Config{
 		"config1": {
-			Key:    rand.Password(64, 10, 0),
+			Key:    uuid.NewString(),
 			Expire: "24h",
 		},
 	})

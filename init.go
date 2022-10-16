@@ -1,8 +1,8 @@
 package jwt
 
 import (
+	"github.com/google/uuid"
 	"github.com/ismdeep/config"
-	"github.com/ismdeep/rand"
 )
 
 func init() {
@@ -23,7 +23,7 @@ func init() {
 	clients = make(map[string]*JWT)
 	defaultJWTClient = &JWT{}
 	Init(&Config{
-		Key:    rand.Password(64, 10, 0),
+		Key:    uuid.NewString(),
 		Expire: "72h",
 	})
 }

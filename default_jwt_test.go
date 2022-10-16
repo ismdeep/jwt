@@ -3,9 +3,10 @@ package jwt
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ismdeep/rand"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInit(t *testing.T) {
@@ -18,7 +19,7 @@ func TestInit(t *testing.T) {
 		{
 			name: "",
 			config: &Config{
-				Key:    rand.Password(64, 10, 0),
+				Key:    uuid.NewString(),
 				Expire: "24h",
 			},
 			wantErr: false,
@@ -33,7 +34,7 @@ func TestInit(t *testing.T) {
 
 func TestCreateToken(t *testing.T) {
 	config := &Config{
-		Key:    rand.Password(64, 10, 0),
+		Key:    uuid.NewString(),
 		Expire: "24h",
 	}
 	Init(config)
@@ -64,7 +65,7 @@ func TestCreateToken(t *testing.T) {
 
 func TestParseToken(t *testing.T) {
 	config := &Config{
-		Key:    rand.Password(64, 10, 0),
+		Key:    uuid.NewString(),
 		Expire: "24h",
 	}
 	Init(config)

@@ -2,9 +2,10 @@ package jwt
 
 import (
 	"errors"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/ismdeep/rand"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 )
 
 // JWT Struct Info
@@ -22,7 +23,7 @@ type claimsStruct struct {
 // New create instance
 func New(config *Config) *JWT {
 	c := &Config{
-		Key:    rand.Password(64, 10, 0),
+		Key:    uuid.NewString(),
 		Expire: "72h",
 	}
 	if config != nil {
@@ -65,17 +66,10 @@ func (receiver *JWT) VerifyToken(tokenStr string) (string, error) {
 		return "", err
 	}
 	if !token.Valid {
-		err = errors.New("token is invalid")
-		return "", err
+		return "", errors.New("token is invalid")
 	}
 
-	_, ok = claim["content"]
-	if !ok {
-		return "", errors.New("invalid token")
-	}
-
-	content := claim["content"].(string)
-	return content, nil
+	return claim["content"].(string), nil
 }
 
 func (receiver *JWT) secret() jwt.Keyfunc {

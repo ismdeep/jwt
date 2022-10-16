@@ -3,9 +3,10 @@ module github.com/ismdeep/jwt
 go 1.18
 
 require (
+	bou.ke/monkey v1.0.2
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/google/uuid v1.3.0
 	github.com/ismdeep/config v0.0.1
-	github.com/ismdeep/rand v0.3.0
 	github.com/stretchr/testify v1.7.1
 )
 
