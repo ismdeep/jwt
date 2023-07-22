@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -17,7 +17,7 @@ type JWT struct {
 // claims jwt claims
 type claimsStruct struct {
 	Content string `json:"content"`
-	jwt.StandardClaims
+	jwt.MapClaims
 }
 
 // New create instance
@@ -45,8 +45,8 @@ func New(config *Config) *JWT {
 func (receiver *JWT) GenerateToken(content string) (token string, err error) {
 	claim := &claimsStruct{
 		Content: content,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(receiver.expireTime).Unix(),
+		MapClaims: jwt.MapClaims{
+			"ExpiresAt": time.Now().Add(receiver.expireTime).Unix(),
 		},
 	}
 	tokens := jwt.NewWithClaims(jwt.SigningMethodHS512, claim)
