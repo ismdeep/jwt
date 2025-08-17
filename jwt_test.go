@@ -23,3 +23,19 @@ func TestJWT_VerifyToken(t *testing.T) {
 
 	t.Logf("content = %v", content)
 }
+
+func TestJWT_ExpiredAt(t *testing.T) {
+	j := New(&Config{
+		Key:    uuid.NewString(),
+		Expire: "72h",
+	})
+	token, err := j.GenerateToken("hello")
+	assert.NoError(t, err)
+	_, err1 := jwt.Parse(token, j.secret())
+	assert.NoError(t, err1)
+
+	t1, err2 := j.ExpiredAt(token)
+	assert.NoError(t, err2)
+
+	t.Logf("expired_at = %v", t1)
+}

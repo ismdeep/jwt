@@ -72,6 +72,25 @@ func (receiver *JWT) VerifyToken(tokenStr string) (string, error) {
 	return claim["content"].(string), nil
 }
 
+func (receiver *JWT) ExpiredAt(tokenStr string) (*time.Time, error) {
+	token, err := jwt.Parse(tokenStr, receiver.secret())
+	if err != nil {
+		return nil, err
+	}
+	claim, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		err = errors.New("cannot convert claim to map claim")
+		return nil, err
+	}
+	if !token.Valid {
+		return nil, errors.New("token is invalid")
+	}
+
+	m := claim["MapClaims"].(map[string]any)
+	expiredAt := time.Unix(int64(m["ExpiresAt"].(float64)), 0)
+	return &expiredAt, nil
+}
+
 func (receiver *JWT) secret() jwt.Keyfunc {
 	return func(token *jwt.Token) (interface{}, error) {
 		return receiver.signKey, nil
