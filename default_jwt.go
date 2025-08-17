@@ -1,5 +1,7 @@
 package jwt
 
+import "time"
+
 var defaultJWTClient *JWT
 
 // Init 初始化
@@ -15,4 +17,9 @@ func GenerateToken(content string) (string, error) {
 // VerifyToken 格式化token
 func VerifyToken(tokens string) (string, error) {
 	return defaultJWTClient.VerifyToken(tokens)
+}
+
+// ExpiredAt 获取到期时间
+func ExpiredAt(tokens string) (*time.Time, error) {
+	return defaultJWTClient.ExpiredAt(tokens)
 }

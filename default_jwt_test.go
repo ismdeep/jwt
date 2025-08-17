@@ -121,3 +121,16 @@ func TestCreateTokenWithUserStruct(t *testing.T) {
 
 	fmt.Printf("token = %v\n", token)
 }
+
+func TestExpiredAt(t *testing.T) {
+	Init(&Config{
+		Key:    uuid.NewString(),
+		Expire: "24h",
+	})
+
+	token, err := GenerateToken("hello")
+	assert.NoError(t, err)
+	expiredAt, err := ExpiredAt(token)
+	assert.NoError(t, err)
+	t.Logf("expiredAt = %v\n", expiredAt)
+}
